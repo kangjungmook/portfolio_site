@@ -1,27 +1,17 @@
+import Link from "next/link";
 import { fetchGitHubData } from "@/lib/github";
+import { PROJECTS } from "@/lib/projects";
 import ContribGraph from "./ContribGraph";
+import SkillsCard from "./SkillsCard";
+import MbtiCard from "./MbtiCard";
+import MilitaryCard from "./MilitaryCard";
+import EducationCard from "./EducationCard";
+import PhilosophyCard from "./PhilosophyCard";
+import StatsCard from "./StatsCard";
 
-export const revalidate = 3600; // re-fetch GitHub data every hour
+export const revalidate = 3600;
 
-/* ─── Static content ─────────────────────────────────────────────── */
-
-const SKILLS = [
-  { category: "Backend",  items: ["Java", "Spring Boot", "MySQL", "MariaDB"] },
-  { category: "DevOps",   items: ["Docker"] },
-  { category: "Frontend", items: ["JavaScript", "Vue.js"] },
-] as const;
-
-const PS_LINKS = [
-  { name: "백준 BOJ",   desc: "프로필 링크 추가 예정" },
-  { name: "solved.ac",  desc: "티어 / 링크 추가 예정" },
-] as const;
-
-const PROJECTS = [
-  { name: "회의실 예약 시스템", desc: "설명 추가 예정" },
-  { name: "OMR 좌표 추출 툴",  desc: "설명 추가 예정" },
-] as const;
-
-const CARD_DELAYS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35];
+const CARD_DELAYS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4];
 
 /* ─── Helpers ────────────────────────────────────────────────────── */
 
@@ -98,8 +88,8 @@ export default async function Portfolio() {
         {/* ── Bento grid ── */}
         <div className="bento">
 
-          {/* 1 · About (c2) */}
-          <div className="card c2" style={{ animationDelay: `${CARD_DELAYS[0]}s` }}>
+          {/* 1 · About */}
+          <div className="card" style={{ animationDelay: `${CARD_DELAYS[0]}s` }}>
             <CardLabel>About</CardLabel>
             <h3 className="card-title">
               안정적인 API 설계와 데이터 최적화에 몰입합니다
@@ -111,62 +101,17 @@ export default async function Portfolio() {
             </p>
           </div>
 
-          {/* 2 · Now Playing (c1) */}
-          <div className="card" style={{ animationDelay: `${CARD_DELAYS[1]}s` }}>
-            <CardLabel green>Now Playing</CardLabel>
-            <div className="music-row">
-              <div className="album-art">♪</div>
-              <div className="music-info">
-                <div className="track-name">Sample Track</div>
-                <div className="artist-name">Sample Artist</div>
-              </div>
-            </div>
-            <div className="eq-bars">
-              {([0, 0.2, 0.4, 0.15, 0.35] as const).map((delay, i) => (
-                <span key={i} className="eq-bar" style={{ animationDelay: `${delay}s` }} />
-              ))}
-            </div>
-            <p className="card-note">* Spotify 연동 예정</p>
-          </div>
+          {/* 2 · MBTI (c1) */}
+          <MbtiCard delay={CARD_DELAYS[1]} />
 
-          {/* 3 · Skills (c2) */}
-          <div className="card c2" style={{ animationDelay: `${CARD_DELAYS[2]}s` }}>
-            <CardLabel>Skills</CardLabel>
-            <div className="skills-list">
-              {SKILLS.map(({ category, items }) => (
-                <div key={category} className="skill-row">
-                  <span className="skill-category">{category}</span>
-                  <div className="skill-tags">
-                    {items.map((item) => (
-                      <span key={item} className="skill-tag">{item}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* 3 · Skills */}
+          <SkillsCard delay={CARD_DELAYS[2]} />
 
-          {/* 4 · Education (c1) */}
-          <div className="card" style={{ animationDelay: `${CARD_DELAYS[3]}s` }}>
-            <CardLabel>Education</CardLabel>
-            <div className="edu-item">
-              <div className="edu-school">동서울대학교</div>
-              <div className="edu-detail">
-                AI응용소프트웨어학과 · P-TECH<br />2학년 재학 중
-              </div>
-            </div>
-            <div className="edu-item edu-item-sep">
-              <div className="edu-school">성일정보고등학교</div>
-              <div className="edu-detail">소프트웨어개발과 졸업</div>
-            </div>
-            <div className="cert-tags">
-              <span className="cert-tag">정보처리산업기사</span>
-              <span className="cert-tag">SW개발 L3</span>
-            </div>
-          </div>
+          {/* 4 · Education */}
+          <EducationCard delay={CARD_DELAYS[3]} />
 
-          {/* 5 · GitHub Activity (c2) */}
-          <div className="card c2" style={{ animationDelay: `${CARD_DELAYS[4]}s` }}>
+          {/* 5 · GitHub Activity */}
+          <div className="card" style={{ animationDelay: `${CARD_DELAYS[4]}s` }}>
             <div className="card-header">
               <CardLabel>GitHub Activity</CardLabel>
               <a
@@ -197,33 +142,39 @@ export default async function Portfolio() {
             )}
           </div>
 
-          {/* 6 · Algorithm / PS (c1) */}
-          <div className="card" style={{ animationDelay: `${CARD_DELAYS[5]}s` }}>
-            <CardLabel>Algorithm / PS</CardLabel>
-            {PS_LINKS.map(({ name, desc }) => (
-              <a key={name} href="#" className="ps-link">
-                <div>
-                  <div className="ps-name">{name}</div>
-                  <div className="ps-desc">{desc}</div>
-                </div>
-                <span className="ps-arrow">↗</span>
-              </a>
-            ))}
-          </div>
 
-          {/* 7 · Recent Projects (c3) */}
-          <div className="card c3" style={{ animationDelay: `${CARD_DELAYS[6]}s` }}>
+          {/* 7 · Military Service (c2) */}
+          <MilitaryCard delay={CARD_DELAYS[6]} />
+
+          {/* 8 · Stats */}
+          <StatsCard
+            totalCommits={gh.totalCommits}
+            repos={gh.repos}
+            streak={gh.streak}
+            delay={CARD_DELAYS[5]}
+          />
+
+          {/* 9 · Philosophy */}
+          <PhilosophyCard delay={CARD_DELAYS[6]} />
+
+          {/* 10 · Recent Projects */}
+          <div className="card" style={{ animationDelay: `${CARD_DELAYS[7]}s` }}>
             <CardLabel>Recent Projects</CardLabel>
             <div className="projects-grid">
-              {PROJECTS.map(({ name, desc }) => (
-                <a key={name} href="#" className="project-card">
+              {PROJECTS.map(({ slug, title, summary, stack }) => (
+                <Link key={slug} href={`/projects/${slug}`} className="project-card">
                   <div className="project-thumb" aria-hidden="true" />
                   <div className="project-info">
-                    <div className="project-name">{name}</div>
-                    <div className="project-desc">{desc}</div>
+                    <div className="project-name">{title}</div>
+                    <div className="project-desc">{summary}</div>
+                    <div className="project-stack-row">
+                      {stack.slice(0, 3).map(s => (
+                        <span key={s} className="project-stack-chip">{s}</span>
+                      ))}
+                    </div>
                   </div>
                   <span className="project-arrow" aria-hidden="true">↗</span>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
