@@ -16,7 +16,7 @@ export default function EducationCard({ delay }: { delay: number }) {
 
   return (
     <div className="card" style={{ animationDelay: `${delay}s` }}>
-      {/* header */}
+      {/* 헤더 */}
       <div className="edu-header">
         <div className="card-label">
           <span className="dot" />

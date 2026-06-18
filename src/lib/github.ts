@@ -9,7 +9,7 @@ export interface GitHubData {
   repos: number;
   totalCommits: number;
   streak: number;
-  contributions: ContribDay[] | null; // null = no token, fall back to random
+  contributions: ContribDay[] | null; // null이면 토큰 없음, 랜덤으로 대체
 }
 
 const FALLBACK: GitHubData = {
@@ -27,7 +27,7 @@ export async function fetchGitHubData(): Promise<GitHubData> {
   };
 
   try {
-    // ── REST: public user info (no token required) ────────────────
+    // REST: 공개 유저 정보 (토큰 불필요)
     const userRes = await fetch(
       `https://api.github.com/users/${USERNAME}`,
       { headers, next: { revalidate: 3600 } }
@@ -38,7 +38,7 @@ export async function fetchGitHubData(): Promise<GitHubData> {
 
     if (!token) return { ...FALLBACK, repos };
 
-    // ── GraphQL: contribution calendar (token required) ───────────
+    // GraphQL: 잔디 데이터 (토큰 필요)
     const gqlRes = await fetch("https://api.github.com/graphql", {
       method: "POST",
       headers: { ...headers, "Content-Type": "application/json" },
@@ -69,7 +69,7 @@ export async function fetchGitHubData(): Promise<GitHubData> {
 
     const totalCommits: number = cc.totalCommitContributions;
 
-    // Flatten weeks → days, take last 133 (= 19 weeks, grid-aligned)
+    // 주 단위 → 일 단위로 펼치고 마지막 133개만 사용 (19주, 그리드 맞춤)
     const allDays: ContribDay[] = cc.contributionCalendar.weeks
       .flatMap(
         (w: { contributionDays: { contributionCount: number; date: string }[] }) =>
@@ -82,7 +82,7 @@ export async function fetchGitHubData(): Promise<GitHubData> {
 
     const contributions = allDays.slice(-133);
 
-    // Current streak: walk backwards, skip today if still 0
+    // 연속 커밋: 오늘 커밋 0이면 건너뛰고 역순으로 계산
     const sorted = [...allDays].reverse();
     const today = new Date().toISOString().split("T")[0];
     let streak = 0;

@@ -15,12 +15,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <main className="proj-page">
       <div className="proj-container">
 
-        {/* back */}
+        {/* 뒤로가기 */}
         <Link href="/" className="proj-back">
           ← 돌아가기
         </Link>
 
-        {/* header */}
+        {/* 프로젝트 헤더 */}
         <div className="proj-header">
           <h1 className="proj-title">{project.title}</h1>
           <p className="proj-summary">{project.summary}</p>
@@ -44,13 +44,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <div className="proj-body">
 
-          {/* description */}
+          {/* 소개 */}
           <section className="proj-section">
             <h2 className="proj-section-title">프로젝트 소개</h2>
             <p className="proj-desc">{project.description}</p>
           </section>
 
-          {/* highlights */}
+          {/* 주요 기능 */}
           <section className="proj-section">
             <h2 className="proj-section-title">주요 기능</h2>
             <ul className="proj-highlights">
@@ -63,7 +63,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             </ul>
           </section>
 
-          {/* stack */}
+          {/* 기술 스택 */}
           <section className="proj-section">
             <h2 className="proj-section-title">기술 스택</h2>
             <div className="proj-stack">

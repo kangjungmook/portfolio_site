@@ -14,7 +14,7 @@ export default function MbtiCard({ delay }: { delay: number }) {
 
   return (
     <div className="card" style={{ animationDelay: `${delay}s` }}>
-      {/* Header */}
+      {/* 헤더 */}
       <div className="mbti-header">
         <div className="card-label">
           <span className="dot" />
@@ -29,7 +29,7 @@ export default function MbtiCard({ delay }: { delay: number }) {
         </button>
       </div>
 
-      {/* Description overlay */}
+      {/* 설명 */}
       {open && (
         <div className="mbti-desc">
           {TRAITS.map((t) => (
@@ -41,7 +41,7 @@ export default function MbtiCard({ delay }: { delay: number }) {
         </div>
       )}
 
-      {/* Main content */}
+      {/* 메인 */}
       {!open && (
         <>
           <div className="mbti-type">ISTP</div>

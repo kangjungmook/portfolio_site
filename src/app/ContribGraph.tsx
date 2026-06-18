@@ -28,7 +28,7 @@ export default function ContribGraph({
         }))
       );
     } else {
-      // Fallback: random pattern while no token is configured
+      // 토큰 없을 때 랜덤으로 채움
       const lv = [0.22, 0.36, 0.55, 0.78, 0.95];
       setCells(
         Array.from({ length: 133 }, () => {

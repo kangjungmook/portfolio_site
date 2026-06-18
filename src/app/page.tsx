@@ -9,12 +9,12 @@ import EducationCard from "./EducationCard";
 import PhilosophyCard from "./PhilosophyCard";
 import StatsCard from "./StatsCard";
 
+// 1시간마다 깃허브 데이터 재요청
 export const revalidate = 3600;
 
 const CARD_DELAYS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4];
 
-/* ─── Helpers ────────────────────────────────────────────────────── */
-
+// 공통 컴포넌트
 function Dot({ green }: { green?: boolean }) {
   return <span className={green ? "dot dot-green" : "dot"} />;
 }
@@ -41,15 +41,13 @@ function ArrowIcon() {
   );
 }
 
-/* ─── Page (server component) ────────────────────────────────────── */
-
 export default async function Portfolio() {
   const gh = await fetchGitHubData();
 
   const hasRealData = gh.contributions !== null || process.env.GITHUB_TOKEN;
   const stats = [
-    { value: String(gh.totalCommits), unit: "",  label: "최근 1년 커밋" },
-    { value: String(gh.repos),        unit: "",  label: "Repositories" },
+    { value: String(gh.totalCommits), unit: "",   label: "최근 1년 커밋" },
+    { value: String(gh.repos),        unit: "",   label: "Repositories" },
     { value: String(gh.streak),       unit: "일", label: "연속 커밋" },
   ];
 
@@ -59,7 +57,7 @@ export default async function Portfolio() {
 
       <div className="container">
 
-        {/* ── Hero ── */}
+        {/* 상단 소개 */}
         <section className="hero">
           <div className="greeting-badge">
             안녕하세요 <span aria-label="인사">👋</span>
@@ -79,16 +77,16 @@ export default async function Portfolio() {
             <a href="#" className="cta-secondary">
               Blog <ArrowIcon />
             </a>
-            <a href="mailto:" className="cta-secondary">
+            <a href="mailto:k01088219732@gmail.com" className="cta-secondary">
               Email ✉
             </a>
           </div>
         </section>
 
-        {/* ── Bento grid ── */}
+        {/* 카드 그리드 */}
         <div className="bento">
 
-          {/* 1 · About */}
+          {/* 자기소개 */}
           <div className="card" style={{ animationDelay: `${CARD_DELAYS[0]}s` }}>
             <CardLabel>About</CardLabel>
             <h3 className="card-title">
@@ -101,16 +99,16 @@ export default async function Portfolio() {
             </p>
           </div>
 
-          {/* 2 · MBTI (c1) */}
+          {/* MBTI */}
           <MbtiCard delay={CARD_DELAYS[1]} />
 
-          {/* 3 · Skills */}
+          {/* 기술 스택 */}
           <SkillsCard delay={CARD_DELAYS[2]} />
 
-          {/* 4 · Education */}
+          {/* 학력 */}
           <EducationCard delay={CARD_DELAYS[3]} />
 
-          {/* 5 · GitHub Activity */}
+          {/* 깃허브 활동 */}
           <div className="card" style={{ animationDelay: `${CARD_DELAYS[4]}s` }}>
             <div className="card-header">
               <CardLabel>GitHub Activity</CardLabel>
@@ -142,11 +140,10 @@ export default async function Portfolio() {
             )}
           </div>
 
-
-          {/* 7 · Military Service (c2) */}
+          {/* 병역 */}
           <MilitaryCard delay={CARD_DELAYS[6]} />
 
-          {/* 8 · Stats */}
+          {/* 개인 통계 */}
           <StatsCard
             totalCommits={gh.totalCommits}
             repos={gh.repos}
@@ -154,10 +151,10 @@ export default async function Portfolio() {
             delay={CARD_DELAYS[5]}
           />
 
-          {/* 9 · Philosophy */}
+          {/* 개발자 소개 */}
           <PhilosophyCard delay={CARD_DELAYS[6]} />
 
-          {/* 10 · Recent Projects */}
+          {/* 프로젝트 */}
           <div className="card" style={{ animationDelay: `${CARD_DELAYS[7]}s` }}>
             <CardLabel>Recent Projects</CardLabel>
             <div className="projects-grid">

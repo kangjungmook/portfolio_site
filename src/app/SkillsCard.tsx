@@ -9,6 +9,7 @@ import {
   SiJavascript, SiVuedotjs,
   SiAnthropic, SiOpenai,
   SiIntellijidea, SiGit, SiGooglechrome,
+  SiPython, SiTypescript, SiReact, SiNextdotjs,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
 
@@ -19,8 +20,9 @@ const SKILLS: SkillGroup[] = [
   {
     category: "Backend",
     items: [
-      { name: "Java",        Icon: FaJava,   color: "#f89820" },
-      { name: "Spring Boot", Icon: SiSpring, color: "#6DB33F" },
+      { name: "Java",        Icon: FaJava,    color: "#f89820" },
+      { name: "Spring Boot", Icon: SiSpring,  color: "#6DB33F" },
+      { name: "Python",      Icon: SiPython,  color: "#3776AB" },
     ],
   },
   {
@@ -42,7 +44,10 @@ const SKILLS: SkillGroup[] = [
     category: "Frontend",
     items: [
       { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
+      { name: "TypeScript", Icon: SiTypescript, color: "#3178C6" },
       { name: "Vue.js",     Icon: SiVuedotjs,   color: "#4FC08D" },
+      { name: "React",      Icon: SiReact,      color: "#61DAFB" },
+      { name: "Next.js",    Icon: SiNextdotjs,  color: "#ffffff" },
     ],
   },
   {

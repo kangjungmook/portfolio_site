@@ -63,7 +63,7 @@ export default function MilitaryCard({ delay }: { delay: number }) {
         <span className="mil-label">전역</span>
       </div>
 
-      {/* stats row */}
+      {/* 통계 */}
       <div className="mil-stats">
         <div className="mil-stat">
           <span className="mil-stat-value">{info.elapsedDays.toLocaleString()}</span>
@@ -81,7 +81,7 @@ export default function MilitaryCard({ delay }: { delay: number }) {
         </div>
       </div>
 
-      {/* milestone timeline */}
+      {/* 마일스톤 */}
       <div className="mil-milestone-wrap">
         <div className="mil-milestone-line" />
         {MILESTONES.map((m, i) => {
