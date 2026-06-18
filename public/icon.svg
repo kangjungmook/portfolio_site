@@ -1,0 +1,34 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c1c30"/>
+      <stop offset="100%" stop-color="#0a0a18"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="512" height="512" rx="110" fill="url(#bg)"/>
+
+  <!-- 파란 테두리 -->
+  <rect x="4" y="4" width="504" height="504" rx="107" fill="none" stroke="#6e8bff" stroke-width="6" stroke-opacity="0.55"/>
+
+  <!-- 파란 광원 효과 -->
+  <ellipse cx="420" cy="90" rx="120" ry="80" fill="#6e8bff" opacity="0.07"/>
+
+  <!-- K 세로 막대 -->
+  <line x1="162" y1="145" x2="162" y2="367" stroke="white" stroke-width="52" stroke-linecap="round"/>
+
+  <!-- K 위쪽 대각선 (중앙 → 오른쪽 위) -->
+  <line x1="190" y1="258" x2="355" y2="145" stroke="white" stroke-width="48" stroke-linecap="round"/>
+
+  <!-- K 아래쪽 대각선 (중앙 → 오른쪽 아래) -->
+  <line x1="190" y1="258" x2="355" y2="367" stroke="white" stroke-width="48" stroke-linecap="round"/>
+
+  <!-- 파란 점 액센트 (하단 오른쪽) -->
+  <circle cx="370" cy="385" r="28" fill="#6e8bff" opacity="0.3"/>
+  <circle cx="370" cy="385" r="16" fill="#6e8bff" opacity="0.85"/>
+</svg>
