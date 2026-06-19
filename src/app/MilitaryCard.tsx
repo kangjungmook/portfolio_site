@@ -42,7 +42,7 @@ export default function MilitaryCard({ delay }: { delay: number }) {
     <div className="card" style={{ animationDelay: `${delay}s` }}>
       <div className="card-label">
         <span className="dot" />
-        Military Service
+        병역
       </div>
 
       <div className="mil-top">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { fetchGitHubData } from "@/lib/github";
 import { PROJECTS } from "@/lib/projects";
 import ContribGraph from "./ContribGraph";
@@ -8,6 +9,7 @@ import MilitaryCard from "./MilitaryCard";
 import EducationCard from "./EducationCard";
 import PhilosophyCard from "./PhilosophyCard";
 import StatsCard from "./StatsCard";
+import TypingText from "./TypingText";
 
 // 1시간마다 깃허브 데이터 재요청
 export const revalidate = 3600;
@@ -64,7 +66,7 @@ export default async function Portfolio() {
           </div>
           <h1 className="hero-name">강정묵</h1>
           <p className="hero-tagline">
-            기본기에 충실하며 실무에서 부딪히며 배우는 것을 즐깁니다
+            <TypingText />
           </p>
           <div className="hero-ctas">
             <a
@@ -88,7 +90,7 @@ export default async function Portfolio() {
 
           {/* 자기소개 */}
           <div className="card" style={{ animationDelay: `${CARD_DELAYS[0]}s` }}>
-            <CardLabel>About</CardLabel>
+            <CardLabel>소개</CardLabel>
             <h3 className="card-title">
               안정적인 API 설계와 데이터 최적화에 몰입합니다
             </h3>
@@ -111,7 +113,7 @@ export default async function Portfolio() {
           {/* 깃허브 활동 */}
           <div className="card" style={{ animationDelay: `${CARD_DELAYS[4]}s` }}>
             <div className="card-header">
-              <CardLabel>GitHub Activity</CardLabel>
+              <CardLabel>깃허브 활동</CardLabel>
               <a
                 href="https://github.com/kangjungmook"
                 target="_blank" rel="noopener noreferrer"
@@ -156,11 +158,20 @@ export default async function Portfolio() {
 
           {/* 프로젝트 */}
           <div className="card" style={{ animationDelay: `${CARD_DELAYS[7]}s` }}>
-            <CardLabel>Recent Projects</CardLabel>
+            <div className="card-header">
+              <CardLabel>최근 프로젝트</CardLabel>
+              <Link href="/projects" className="github-link">전체 보기 ↗</Link>
+            </div>
             <div className="projects-grid">
-              {PROJECTS.map(({ slug, title, summary, stack }) => (
+              {PROJECTS.map(({ slug, title, summary, stack, icon }) => (
                 <Link key={slug} href={`/projects/${slug}`} className="project-card">
-                  <div className="project-thumb" aria-hidden="true" />
+                  {icon ? (
+                    <div className="project-thumb project-thumb-icon">
+                      <Image src={icon} alt={title} fill className="project-thumb-img" />
+                    </div>
+                  ) : (
+                    <div className="project-thumb" aria-hidden="true" />
+                  )}
                   <div className="project-info">
                     <div className="project-name">{title}</div>
                     <div className="project-desc">{summary}</div>

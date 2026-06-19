@@ -89,7 +89,7 @@ export default function SkillsCard({ delay }: { delay: number }) {
     <div className="card" style={{ animationDelay: `${delay}s` }}>
       <div className="card-label">
         <span className="dot" />
-        Skills
+        기술 스택
       </div>
       <div className="skills-scroll-wrap">
         <div className="skills-scroll" ref={scrollRef}>

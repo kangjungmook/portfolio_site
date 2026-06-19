@@ -5,34 +5,97 @@ import { useState } from "react";
 const CURRENT_CERTS = ["정보처리산업기사", "SW개발 L3"];
 
 const GOAL_CERTS = [
-  { name: "정보처리기사",        status: "준비 중" },
-  { name: "AWS SAA",             status: "목표" },
-  { name: "리눅스마스터 2급",    status: "목표" },
-  { name: "SQLD",                status: "목표" },
+  { name: "정보처리기사",     status: "준비 중" },
+  { name: "AWS SAA",          status: "목표" },
+  { name: "리눅스마스터 2급", status: "목표" },
+  { name: "SQLD",             status: "목표" },
 ];
 
-export default function EducationCard({ delay }: { delay: number }) {
-  const [open, setOpen] = useState(false);
+const CAREER_WORKS = [
+  { title: "논술 프로그램 기능 개발 및 유지보수", stack: ["Java", "Spring Boot", "JavaScript"] },
+  { title: "사내 업무 자동화 툴 개발",            stack: ["Python", "Vue.js"] },
+];
+
+function FlipHint({ label }: { label: string }) {
+  return (
+    <div className="edu-flip-hint">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" strokeWidth="2.2"
+        strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 4v6h6M23 20v-6h-6" />
+        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15" />
+      </svg>
+      {label}
+    </div>
+  );
+}
+
+function CareerFace() {
+  return (
+    <>
+      <div className="card-label">
+        <span className="dot" />
+        경력
+      </div>
+
+      <div className="car-entry">
+        <div className="car-dot-col">
+          <div className="car-dot car-dot-active" />
+          <div className="car-line" />
+        </div>
+        <div className="car-body">
+          <div className="car-header">
+            <span className="car-company">(주)유플러스시스템</span>
+            <span className="car-badge">재직 중</span>
+          </div>
+          <div className="car-role">
+            백엔드 개발자
+            <span className="car-type">산업기능요원</span>
+          </div>
+          <div className="car-period">2025.03 — 현재</div>
+          <div className="car-works">
+            {CAREER_WORKS.map((w) => (
+              <div key={w.title} className="car-work-item">
+                <span className="car-work-dot" />
+                <div>
+                  <div className="car-work-title">{w.title}</div>
+                  <div className="car-work-stack">
+                    {w.stack.map((s) => (
+                      <span key={s} className="car-stack-chip">{s}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <FlipHint label="탭하면 학력 보기" />
+    </>
+  );
+}
+
+function EduFace() {
+  const [showGoals, setShowGoals] = useState(false);
 
   return (
-    <div className="card" style={{ animationDelay: `${delay}s` }}>
-      {/* 헤더 */}
+    <>
       <div className="edu-header">
         <div className="card-label">
           <span className="dot" />
-          Education
+          학력
         </div>
         <button
-          className={`mbti-toggle ${open ? "mbti-toggle-open" : ""}`}
-          onClick={() => setOpen(v => !v)}
-          aria-label={open ? "닫기" : "자격증 목표 보기"}
+          className={`mbti-toggle ${showGoals ? "mbti-toggle-open" : ""}`}
+          onClick={(e) => { e.stopPropagation(); setShowGoals(v => !v); }}
+          aria-label={showGoals ? "닫기" : "목표 자격증 보기"}
         >
           +
         </button>
       </div>
 
-      {open ? (
-        /* 목표 자격증 뷰 */
+      {showGoals ? (
         <div className="edu-goals">
           <div className="edu-goals-title">목표 자격증</div>
           <div className="edu-goal-list">
@@ -47,7 +110,6 @@ export default function EducationCard({ delay }: { delay: number }) {
           </div>
         </div>
       ) : (
-        /* 기본 뷰 */
         <>
           <div className="edu-timeline">
             <div className="edu-tl-item">
@@ -81,6 +143,38 @@ export default function EducationCard({ delay }: { delay: number }) {
           </div>
         </>
       )}
+
+      <FlipHint label="탭하면 경력 보기" />
+    </>
+  );
+}
+
+export default function EducationCard({ delay }: { delay: number }) {
+  const [showBack, setShowBack] = useState(false);
+  const [animClass, setAnimClass] = useState("");
+
+  const handleFlip = () => {
+    if (animClass) return;
+    setAnimClass("edu-flip-out");
+    setTimeout(() => {
+      setShowBack(v => !v);
+      setAnimClass("edu-flip-in");
+    }, 280);
+    setTimeout(() => setAnimClass(""), 560);
+  };
+
+  return (
+    <div
+      className="card"
+      style={{ animationDelay: `${delay}s`, cursor: "pointer" }}
+      onClick={handleFlip}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && handleFlip()}
+    >
+      <div className={animClass || undefined}>
+        {showBack ? <EduFace /> : <CareerFace />}
+      </div>
     </div>
   );
 }

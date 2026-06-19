@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProject, PROJECTS } from "@/lib/projects";
+import ImageGallery from "./ImageGallery";
 
 export function generateStaticParams() {
   return PROJECTS.map(p => ({ slug: p.slug }));
@@ -15,12 +16,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <main className="proj-page">
       <div className="proj-container">
 
-        {/* 뒤로가기 */}
-        <Link href="/" className="proj-back">
-          ← 돌아가기
+        <Link href="/projects" className="proj-back">
+          ← 프로젝트 목록
         </Link>
 
-        {/* 프로젝트 헤더 */}
         <div className="proj-header">
           <h1 className="proj-title">{project.title}</h1>
           <p className="proj-summary">{project.summary}</p>
@@ -44,15 +43,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <div className="proj-body">
 
-          {/* 소개 */}
           <section className="proj-section">
             <h2 className="proj-section-title">프로젝트 소개</h2>
             <p className="proj-desc">{project.description}</p>
           </section>
 
-          {/* 주요 기능 */}
           <section className="proj-section">
-            <h2 className="proj-section-title">주요 기능</h2>
+            <h2 className="proj-section-title">주요 기능 및 성과</h2>
             <ul className="proj-highlights">
               {project.highlights.map(h => (
                 <li key={h} className="proj-highlight-item">
@@ -63,7 +60,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             </ul>
           </section>
 
-          {/* 기술 스택 */}
           <section className="proj-section">
             <h2 className="proj-section-title">기술 스택</h2>
             <div className="proj-stack">
@@ -72,6 +68,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               ))}
             </div>
           </section>
+
+          {project.images && project.images.length > 0 && (
+            <section className="proj-section">
+              <h2 className="proj-section-title">스크린샷</h2>
+              <ImageGallery images={project.images} slug={slug} />
+            </section>
+          )}
 
         </div>
       </div>
