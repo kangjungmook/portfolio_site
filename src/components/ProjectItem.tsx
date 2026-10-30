@@ -23,7 +23,7 @@ export default function ProjectItem({ project, index }: { project: Project; inde
         </h3>
         <p className="proj-summary">{summary}</p>
         {team && <p className="mono">{team}</p>}
-        {role && <p className="mono">{role}</p>}
+        {role && <p className="mono">내 역할 · {role}</p>}
         {liveUrl && (
           <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="link proj-live">
             {liveUrl.replace("https://", "")} 열기 ↗

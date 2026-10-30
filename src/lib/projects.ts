@@ -160,6 +160,7 @@ export const PROJECTS: Project[] = [
     title: "사주잇 (SAJUIT)",
     period: "팀 프로젝트 (4명)",
     summary: "생년월일만 넣으면 AI가 사주를 풀어 주는 모바일 웹 서비스",
+    role: "백엔드 개발 · 프론트 개발",
     team: "개발 강정묵·이용하 / 디자인 박준호·어수훈 / 마케팅 박준호",
     liveUrl: "https://sajuit.me",
     did: [],
