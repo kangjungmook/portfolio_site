@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getProject, PUBLIC_PROJECTS } from "@/lib/projects";
+import { getProject, DETAIL_PROJECTS } from "@/lib/projects";
 import Section from "@/components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
 import ImageGallery from "./ImageGallery";
 
 export function generateStaticParams() {
-  return PUBLIC_PROJECTS.map(p => ({ slug: p.slug }));
+  return DETAIL_PROJECTS.map(p => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -27,28 +27,35 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <>
       <header className="bar">
         <div className="bar-inner">
-          <Link href="/projects" className="bar-mark">← 프로젝트 목록으로 돌아가기</Link>
+          <Link href="/projects" className="logo">← 프로젝트 목록으로 돌아가기</Link>
           <ThemeToggle />
         </div>
       </header>
 
       <main className="wrap">
         <div className="page-head">
+          <span className="eyebrow">Project</span>
           <h1 className="page-title">{project.title}</h1>
           <p className="hero-text">{project.summary}</p>
-          <dl className="facts">
-            <div>
-              <dt>기간</dt>
-              <dd>{project.period}</dd>
-            </div>
-            <div>
-              <dt>역할</dt>
-              <dd>{project.role}</dd>
-            </div>
+          <dl className="stats stats-3">
+            {(project.period || project.role) && (
+              <div className="stat">
+                <dt className="stat-label">{project.role ? "기간 · 역할" : "구분"}</dt>
+                <dd className="stat-value stat-value-sm">
+                  {[project.period, project.role].filter(Boolean).join(" · ")}
+                </dd>
+              </div>
+            )}
+            {project.team && (
+              <div className="stat">
+                <dt className="stat-label">팀 구성</dt>
+                <dd className="stat-value stat-value-sm">{project.team}</dd>
+              </div>
+            )}
             {(project.githubUrl || project.liveUrl) && (
-              <div>
-                <dt>링크</dt>
-                <dd className="facts-links">
+              <div className="stat">
+                <dt className="stat-label">링크</dt>
+                <dd className="stat-value stat-value-sm facts-links">
                   {project.githubUrl && (
                     <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="link">
                       GitHub 저장소 열기 ↗
@@ -65,24 +72,41 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </dl>
         </div>
 
-        <Section id="intro" index="01" label="소개">
-          <p className="prose">{project.description}</p>
-        </Section>
+        {project.description && (
+          <Section id="intro" eyebrow="Overview" title="소개">
+            <p className="prose">{project.description}</p>
+          </Section>
+        )}
 
-        <Section id="highlights" index="02" label="주요 구현">
-          <ol className="numbered">
-            {project.highlights.map(h => <li key={h}>{h}</li>)}
-          </ol>
-        </Section>
+        {project.did.length > 0 && (
+          <Section id="highlights" eyebrow="Highlights" title="주요 구현">
+            <ol className="numbered">
+              {project.did.map(h => <li key={h}>{h}</li>)}
+            </ol>
+          </Section>
+        )}
 
-        <Section id="stack" index="03" label="기술">
-          <p className="stack-inline">
-            {project.stack.map(s => <span key={s}>{s}</span>)}
-          </p>
+        {project.features && (
+          <Section id="features" eyebrow="Features" title="주요 기능">
+            <div className="list">
+              {project.features.map(f => (
+                <div key={f.group} className="exp">
+                  <p className="exp-name">{f.group}</p>
+                  <p className="exp-role">{f.items}</p>
+                </div>
+              ))}
+            </div>
+          </Section>
+        )}
+
+        <Section id="stack" eyebrow="Tech Stack" title="기술 스택">
+          <ul className="pills">
+            {project.stack.map(s => <li key={s}>{s}</li>)}
+          </ul>
         </Section>
 
         {hasImages && project.images && (
-          <Section id="screens" index="04" label="화면">
+          <Section id="screens" eyebrow="Screens" title="화면">
             <ImageGallery images={project.images} slug={slug} title={project.title} />
           </Section>
         )}
