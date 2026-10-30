@@ -1,10 +1,19 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getProject, PROJECTS } from "@/lib/projects";
+import { getProject, PUBLIC_PROJECTS } from "@/lib/projects";
+import Section from "@/components/Section";
+import ThemeToggle from "@/components/ThemeToggle";
 import ImageGallery from "./ImageGallery";
 
 export function generateStaticParams() {
-  return PROJECTS.map(p => ({ slug: p.slug }));
+  return PUBLIC_PROJECTS.map(p => ({ slug: p.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const project = getProject(slug);
+  return project ? { title: `${project.title} | 강정묵`, description: project.summary } : {};
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -12,72 +21,72 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const project = getProject(slug);
   if (!project) notFound();
 
+  const hasImages = project.images?.some(g => g.files.length > 0);
+
   return (
-    <main className="proj-page">
-      <div className="proj-container">
-
-        <Link href="/projects" className="proj-back">
-          ← 프로젝트 목록
-        </Link>
-
-        <div className="proj-header">
-          <h1 className="proj-title">{project.title}</h1>
-          <p className="proj-summary">{project.summary}</p>
-          <div className="proj-meta">
-            <span className="proj-meta-item">📅 {project.period}</span>
-            <span className="proj-meta-item">🙋 {project.role}</span>
-          </div>
-          <div className="proj-links">
-            {project.githubUrl && (
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="proj-link proj-link-github">
-                GitHub ↗
-              </a>
-            )}
-            {project.liveUrl && (
-              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="proj-link proj-link-live">
-                Live ↗
-              </a>
-            )}
-          </div>
+    <>
+      <header className="bar">
+        <div className="bar-inner">
+          <Link href="/projects" className="bar-mark">← 프로젝트 목록으로 돌아가기</Link>
+          <ThemeToggle />
         </div>
+      </header>
 
-        <div className="proj-body">
-
-          <section className="proj-section">
-            <h2 className="proj-section-title">프로젝트 소개</h2>
-            <p className="proj-desc">{project.description}</p>
-          </section>
-
-          <section className="proj-section">
-            <h2 className="proj-section-title">주요 기능 및 성과</h2>
-            <ul className="proj-highlights">
-              {project.highlights.map(h => (
-                <li key={h} className="proj-highlight-item">
-                  <span className="proj-highlight-dot" />
-                  {h}
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="proj-section">
-            <h2 className="proj-section-title">기술 스택</h2>
-            <div className="proj-stack">
-              {project.stack.map(s => (
-                <span key={s} className="proj-stack-tag">{s}</span>
-              ))}
+      <main className="wrap">
+        <div className="page-head">
+          <h1 className="page-title">{project.title}</h1>
+          <p className="hero-text">{project.summary}</p>
+          <dl className="facts">
+            <div>
+              <dt>기간</dt>
+              <dd>{project.period}</dd>
             </div>
-          </section>
-
-          {project.images && project.images.length > 0 && (
-            <section className="proj-section">
-              <h2 className="proj-section-title">스크린샷</h2>
-              <ImageGallery images={project.images} slug={slug} />
-            </section>
-          )}
-
+            <div>
+              <dt>역할</dt>
+              <dd>{project.role}</dd>
+            </div>
+            {(project.githubUrl || project.liveUrl) && (
+              <div>
+                <dt>링크</dt>
+                <dd className="facts-links">
+                  {project.githubUrl && (
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="link">
+                      GitHub 저장소 열기 ↗
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="link">
+                      서비스 열기 ↗
+                    </a>
+                  )}
+                </dd>
+              </div>
+            )}
+          </dl>
         </div>
-      </div>
-    </main>
+
+        <Section id="intro" index="01" label="소개">
+          <p className="prose">{project.description}</p>
+        </Section>
+
+        <Section id="highlights" index="02" label="주요 구현">
+          <ol className="numbered">
+            {project.highlights.map(h => <li key={h}>{h}</li>)}
+          </ol>
+        </Section>
+
+        <Section id="stack" index="03" label="기술">
+          <p className="stack-inline">
+            {project.stack.map(s => <span key={s}>{s}</span>)}
+          </p>
+        </Section>
+
+        {hasImages && project.images && (
+          <Section id="screens" index="04" label="화면">
+            <ImageGallery images={project.images} slug={slug} title={project.title} />
+          </Section>
+        )}
+      </main>
+    </>
   );
 }

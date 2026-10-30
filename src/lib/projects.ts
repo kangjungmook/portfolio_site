@@ -17,6 +17,8 @@ export interface Project {
   highlights: string[];
   images?: ProjectImage[];
   icon?: string;
+  /** true면 내용이 채워질 때까지 목록·상세에서 숨깁니다 */
+  draft?: boolean;
 }
 
 export const PROJECTS: Project[] = [
@@ -91,6 +93,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "omr-tool",
+    draft: true,
     title: "OMR 좌표 추출 툴",
     summary: "여기에 한 줄 요약을 적어주세요",
     description: `여기에 프로젝트 설명을 적어주세요.`,
@@ -106,6 +109,8 @@ export const PROJECTS: Project[] = [
   },
 ];
 
+export const PUBLIC_PROJECTS = PROJECTS.filter(p => !p.draft);
+
 export function getProject(slug: string) {
-  return PROJECTS.find(p => p.slug === slug) ?? null;
+  return PUBLIC_PROJECTS.find(p => p.slug === slug) ?? null;
 }

@@ -1,40 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { ProjectImage } from "@/lib/projects";
 
 interface Props {
   images: ProjectImage[];
   slug: string;
+  title: string;
 }
 
-export default function ImageGallery({ images, slug }: Props) {
-  const [activeTab, setActiveTab] = useState(0);
-  const [activeImg, setActiveImg] = useState(0);
-  const [lightbox, setLightbox]   = useState(false);
+export default function ImageGallery({ images, slug, title }: Props) {
+  // 비어 있는 탭(모바일 등)은 노출하지 않음
+  const groups = images.filter(g => g.files.length > 0);
+  const [tab, setTab] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [zoom, setZoom] = useState(false);
 
-  const group  = images[activeTab];
-  const imgSrc = (file: string) => `/projects/${slug}/${group.folder}/${file}`;
-  const prev   = () => setActiveImg(i => (i - 1 + group.files.length) % group.files.length);
-  const next   = () => setActiveImg(i => (i + 1) % group.files.length);
+  const group = groups[tab];
+  const src = (file: string) => `/projects/${slug}/${group.folder}/${file}`;
+  const alt = (i: number) => `${title} ${group.label} 화면 ${i + 1}/${group.files.length}`;
+  const prev = () => setIndex(i => (i - 1 + group.files.length) % group.files.length);
+  const next = () => setIndex(i => (i + 1) % group.files.length);
 
-  const handleTab = (i: number) => {
-    setActiveTab(i);
-    setActiveImg(0);
-  };
+  useEffect(() => {
+    if (!zoom) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoom(false);
+      if (e.key === "ArrowLeft") setIndex(i => (i - 1 + group.files.length) % group.files.length);
+      if (e.key === "ArrowRight") setIndex(i => (i + 1) % group.files.length);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [zoom, group.files.length]);
 
   return (
     <div className="gallery">
-
-      {/* 탭 */}
-      {images.length > 1 && (
-        <div className="gallery-tabs">
-          {images.map((g, i) => (
+      {groups.length > 1 && (
+        <div className="gallery-tabs" role="tablist" aria-label="화면 종류">
+          {groups.map((g, i) => (
             <button
               key={g.label}
-              className={`gallery-tab ${i === activeTab ? "gallery-tab-active" : ""}`}
-              onClick={() => handleTab(i)}
+              role="tab"
+              aria-selected={i === tab}
+              className="gallery-tab"
+              onClick={() => { setTab(i); setIndex(0); }}
             >
               {g.label}
             </button>
@@ -42,75 +52,47 @@ export default function ImageGallery({ images, slug }: Props) {
         </div>
       )}
 
-      {/* 이미지 없을 때 */}
-      {group.files.length === 0 ? (
-        <div className="gallery-empty">
-          <span>📷</span>
-          <p>스크린샷 준비 중입니다</p>
-        </div>
-      ) : (
-        <>
-          {/* 메인 이미지 */}
-          <div className="gallery-main">
-            <div className="gallery-main-img-wrap">
-              <Image
-                key={imgSrc(group.files[activeImg])}
-                src={imgSrc(group.files[activeImg])}
-                alt=""
-                fill
-                className="gallery-main-img"
-                unoptimized
-              />
-            </div>
-            <button className="gallery-nav gallery-nav-prev" onClick={prev} aria-label="이전">‹</button>
-            <button className="gallery-nav gallery-nav-next" onClick={next} aria-label="다음">›</button>
-            <div className="gallery-count">{activeImg + 1} / {group.files.length}</div>
-            <button className="gallery-zoom-btn" onClick={() => setLightbox(true)} aria-label="크게 보기">
-              🔍
-            </button>
-          </div>
-
-          {/* 썸네일 */}
-          <div className="gallery-thumbs">
-            {group.files.map((file, i) => (
-              <button
-                key={file}
-                className={`gallery-thumb ${i === activeImg ? "gallery-thumb-active" : ""}`}
-                onClick={() => setActiveImg(i)}
-                aria-label={`이미지 ${i + 1}`}
-              >
-                <Image
-                  src={imgSrc(file)}
-                  alt=""
-                  width={120}
-                  height={75}
-                  className="gallery-thumb-img"
-                  unoptimized
-                />
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* 라이트박스 */}
-      {lightbox && (
-        <div className="lightbox" onClick={() => setLightbox(false)}>
-          <button className="lightbox-close" onClick={() => setLightbox(false)} aria-label="닫기">✕</button>
-          <button className="lightbox-nav lightbox-prev" onClick={(e) => { e.stopPropagation(); prev(); }} aria-label="이전">‹</button>
+      <div className="gallery-stage">
+        <button
+          type="button"
+          className="gallery-open"
+          onClick={() => setZoom(true)}
+          aria-label="현재 화면을 크게 보기"
+        >
           <Image
-            src={imgSrc(group.files[activeImg])}
-            alt=""
+            key={src(group.files[index])}
+            src={src(group.files[index])}
+            alt={alt(index)}
+            fill
+            sizes="(min-width: 1024px) 720px, 100vw"
+            className="gallery-img"
+            unoptimized
+          />
+        </button>
+      </div>
+
+      <div className="gallery-controls">
+        <button type="button" className="btn" onClick={prev}>이전 화면</button>
+        <span className="muted" aria-live="polite">{index + 1} / {group.files.length}</span>
+        <button type="button" className="btn" onClick={next}>다음 화면</button>
+      </div>
+
+      {zoom && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={alt(index)} onClick={() => setZoom(false)}>
+          <button type="button" className="btn lightbox-close" onClick={() => setZoom(false)}>
+            크게 보기 닫기
+          </button>
+          <Image
+            src={src(group.files[index])}
+            alt={alt(index)}
             width={1600}
             height={1000}
             className="lightbox-img"
             unoptimized
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           />
-          <button className="lightbox-nav lightbox-next" onClick={(e) => { e.stopPropagation(); next(); }} aria-label="다음">›</button>
         </div>
       )}
-
     </div>
   );
 }
