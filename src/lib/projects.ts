@@ -17,6 +17,8 @@ export interface Project {
   highlights: string[];
   images?: ProjectImage[];
   icon?: string;
+  /** 목록 카드에 보여줄 핵심 수치 (2개 권장) */
+  metrics?: { value: string; label: string }[];
   /** true면 내용이 채워질 때까지 목록·상세에서 숨깁니다 */
   draft?: boolean;
 }
@@ -31,6 +33,10 @@ export const PROJECTS: Project[] = [
 직원들이 매일 사용하는 만큼 안정성과 편의성에 집중해 개발했습니다.
 
 사용자는 일·주·월 캘린더 뷰로 전체 예약 현황을 확인하고 바로 예약할 수 있으며, 관리자는 별도 콘솔에서 회의실·회원·예약을 통합 관리합니다. 로비에 설치된 키오스크 모드도 함께 제공합니다.`,
+    metrics: [
+      { value: "4종", label: "사용자 · 관리자 · 키오스크 · 모바일 뷰" },
+      { value: "503", label: "점검 모드 시 ADMIN 외 API 차단" },
+    ],
     stack: ["Java 21", "Spring Boot", "Spring Security", "JWT", "JPA", "MariaDB", "Vue.js", "Firebase FCM"],
     githubUrl: "https://github.com/kangjungmook/meeting-room",
     liveUrl: "",

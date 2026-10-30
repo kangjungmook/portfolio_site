@@ -3,9 +3,10 @@ import { fetchGitHubData } from "@/lib/github";
 import { PUBLIC_PROJECTS } from "@/lib/projects";
 import { CERTS, MBTI, PATH, PROFILE, SERVICE, STACK, WORKSTYLE } from "@/lib/profile";
 import Section from "@/components/Section";
-import ProjectRow from "@/components/ProjectRow";
+import ProjectItem from "@/components/ProjectItem";
 import ContribGraph from "@/components/ContribGraph";
 import ThemeToggle from "@/components/ThemeToggle";
+import CopyEmail from "@/components/CopyEmail";
 
 // 1시간마다 깃허브 데이터·복무 진행률 갱신
 export const revalidate = 3600;
@@ -17,115 +18,125 @@ function serviceProgress() {
   const total = SERVICE.end.getTime() - SERVICE.start.getTime();
   const elapsed = Math.min(total, Math.max(0, now - SERVICE.start.getTime()));
   return {
-    ratio: elapsed / total,
+    pct: (elapsed / total) * 100,
     remaining: Math.max(0, Math.ceil((SERVICE.end.getTime() - now) / MS_DAY)),
   };
 }
 
 const NAV = [
-  { href: "#work", label: "프로젝트" },
-  { href: "#path", label: "이력" },
-  { href: "#stack", label: "기술" },
-  { href: "#activity", label: "활동" },
-  { href: "#contact", label: "연락" },
+  { href: "#work", label: "Projects" },
+  { href: "#experience", label: "Experience" },
+  { href: "#stack", label: "Stack" },
+  { href: "#about", label: "About" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export default async function Portfolio() {
   const gh = await fetchGitHubData();
   const service = serviceProgress();
 
+  const stats = [
+    { value: `${service.pct.toFixed(1)}%`, label: `${SERVICE.label} 복무 진행 · 전역까지 ${service.remaining.toLocaleString()}일` },
+    { value: String(gh.repos), label: "공개 GitHub 저장소" },
+    ...(gh.contributions
+      ? [
+          { value: gh.totalCommits.toLocaleString(), label: "최근 1년 커밋" },
+          { value: `${gh.streak}일`, label: "연속 커밋" },
+        ]
+      : [
+          { value: "4종", label: "회의실 시스템 뷰 · 사용자/관리자/키오스크/모바일" },
+          { value: "2025.03", label: "(주)유플러스시스템 근무 시작" },
+        ]),
+  ];
+
   return (
     <>
       <header className="bar">
         <div className="bar-inner">
-          <a href="#top" className="bar-mark">{PROFILE.name}</a>
+          <a href="#top" className="logo">{PROFILE.name}<span>.</span></a>
           <nav className="bar-nav" aria-label="섹션 이동">
-            {NAV.map(n => (
-              <a key={n.href} href={n.href}>{n.label}</a>
-            ))}
+            {NAV.map(n => <a key={n.href} href={n.href}>{n.label}</a>)}
+            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="bar-cta">
+              GitHub ↗
+            </a>
           </nav>
           <ThemeToggle />
         </div>
       </header>
 
       <main id="top" className="wrap">
-        <div className="hero">
-          <p className="eyebrow">Backend Developer</p>
-          <h1 className="hero-name">{PROFILE.name}</h1>
-          <p className="hero-lead">{PROFILE.headline}</p>
-          <p className="hero-text">{PROFILE.intro}</p>
+        <section className="hero">
+          <span className="eyebrow">Backend Developer · Java · Spring Boot</span>
+          <p className="pill"><span className="pulse" aria-hidden="true" />(주)유플러스시스템 재직 중</p>
+          <h1 className="hero-title">
+            안정적인 <em>API 설계</em>와<br /><em>데이터 최적화</em>에 몰입합니다
+          </h1>
+          <p className="hero-text">
+            복잡한 요구사항을 명확한 로직으로 구현하고, 시스템의 확장성을 고려하는{" "}
+            <strong>백엔드 개발자 {PROFILE.name}</strong>입니다. 보이지 않는 곳의 견고함을 중요하게 생각합니다.
+          </p>
+          <div className="actions">
+            <a href="#work" className="btn btn-solid">프로젝트 살펴보기 <span className="mono">→</span></a>
+            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn">GitHub 프로필 열기</a>
+            <a href={`mailto:${PROFILE.email}`} className="btn">이메일 보내기</a>
+          </div>
 
-          <dl className="facts">
-            <div>
-              <dt>소속</dt>
-              <dd>(주)유플러스시스템</dd>
-            </div>
-            <div>
-              <dt>주력</dt>
-              <dd>Java · Spring Boot</dd>
-            </div>
-            <div className="facts-service">
-              <dt>{SERVICE.label} 복무</dt>
-              <dd>
-                <span className="track" role="img" aria-label={`복무 진행률 ${(service.ratio * 100).toFixed(1)}%`}>
-                  <span className="track-fill" style={{ transform: `scaleX(${service.ratio})` }} />
-                </span>
-                <span className="facts-note">
-                  {(service.ratio * 100).toFixed(1)}% · 전역까지 {service.remaining.toLocaleString()}일
-                </span>
-              </dd>
-            </div>
-          </dl>
-        </div>
-
-        <Section id="work" index="01" label="프로젝트">
-          <div className="rows">
-            {PUBLIC_PROJECTS.map((p, i) => (
-              <ProjectRow key={p.slug} project={p} index={i} />
+          <dl className="stats">
+            {stats.map(s => (
+              <div key={s.label} className="stat">
+                <dt className="stat-value">{s.value}</dt>
+                <dd className="stat-label">{s.label}</dd>
+              </div>
             ))}
+          </dl>
+          {gh.contributions && <ContribGraph days={gh.contributions} />}
+        </section>
+
+        <Section id="work" eyebrow="Selected Works" title="주요 프로젝트">
+          <div className="list">
+            {PUBLIC_PROJECTS.map(p => <ProjectItem key={p.slug} project={p} />)}
           </div>
         </Section>
 
-        <Section id="path" index="02" label="이력">
-          <ol className="ledger">
+        <Section id="experience" eyebrow="Experience" title="경력 · 학력">
+          <div className="list">
             {PATH.map(e => (
-              <li key={e.title} className="ledger-item">
-                <span className="ledger-period">{e.period}</span>
+              <div key={e.title} className="exp">
                 <div>
-                  <h3 className="ledger-title">
+                  <p className="exp-name">
                     {e.title}
                     {e.state && <span className="tag">{e.state}</span>}
-                  </h3>
-                  <p className="ledger-sub">{e.sub}</p>
+                  </p>
+                  <p className="mono">{e.period}</p>
+                </div>
+                <div className="exp-body">
+                  <p className="exp-role">{e.sub}</p>
                   {e.items && (
-                    <ul className="works">
+                    <ul className="exp-works">
                       {e.items.map(w => (
                         <li key={w.title}>
-                          <span>{w.title}</span>
-                          <span className="works-stack">{w.stack.join(" · ")}</span>
+                          {w.title}
+                          <span className="mono"> — {w.stack.join(" · ")}</span>
                         </li>
                       ))}
                     </ul>
                   )}
                 </div>
-              </li>
+              </div>
             ))}
-          </ol>
-
+          </div>
           <div className="certs">
             <div>
-              <h3 className="mini-title">보유 자격증</h3>
-              <ul className="plain">
-                {CERTS.held.map(c => <li key={c}>{c}</li>)}
-              </ul>
+              <h3 className="mono">보유 자격증</h3>
+              <ul>{CERTS.held.map(c => <li key={c}>{c}</li>)}</ul>
             </div>
             <div>
-              <h3 className="mini-title">다음 목표</h3>
-              <ul className="plain">
+              <h3 className="mono">다음 목표</h3>
+              <ul>
                 {CERTS.goals.map(g => (
                   <li key={g.name}>
-                    {g.name}
-                    <span className={g.status === "준비 중" ? "tag" : "muted"}> {g.status}</span>
+                    {g.name}{" "}
+                    <span className={g.status === "준비 중" ? "tag" : "mono"}>{g.status}</span>
                   </li>
                 ))}
               </ul>
@@ -133,71 +144,44 @@ export default async function Portfolio() {
           </div>
         </Section>
 
-        <Section id="stack" index="03" label="기술">
-          <dl className="stack">
+        <Section id="stack" eyebrow="Tech Stack" title="기술 스택">
+          <div className="stack">
             {STACK.map(g => (
-              <div key={g.group} className="stack-row">
-                <dt>{g.group}</dt>
-                <dd>
+              <div key={g.group} className="stack-group">
+                <h3 className="mono">{g.group.toLowerCase()}</h3>
+                <ul>
                   {g.items.map(i => (
-                    <span key={i} className={g.core?.includes(i) ? "stack-core" : undefined}>{i}</span>
+                    <li key={i} className={g.core?.includes(i) ? "is-core" : undefined}>{i}</li>
                   ))}
-                </dd>
+                </ul>
               </div>
             ))}
-          </dl>
-        </Section>
-
-        <Section id="activity" index="04" label="활동">
-          <div className="numbers">
-{gh.contributions && (
-            <div>
-              <span className="num">{gh.totalCommits.toLocaleString()}</span>
-              <span className="num-label">최근 1년 커밋</span>
-            </div>
-)}
-            <div>
-              <span className="num">{gh.repos}</span>
-              <span className="num-label">공개 저장소</span>
-            </div>
-{gh.contributions && (
-            <div>
-              <span className="num">{gh.streak}<small>일</small></span>
-              <span className="num-label">연속 커밋</span>
-            </div>
-)}
           </div>
-          {gh.contributions ? (
-            <ContribGraph days={gh.contributions} />
-          ) : (
-            <p className="muted activity-empty">기여 그래프는 GitHub 토큰을 연결하면 표시됩니다.</p>
-          )}
-          <p className="aside">
-            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="link">
-              @{PROFILE.githubUser} GitHub 프로필 열기 ↗
-            </a>
-          </p>
         </Section>
 
-        <Section id="about" index="05" label="일하는 방식">
-          <ul className="statements">
-            {WORKSTYLE.map(l => <li key={l}>{l}</li>)}
-          </ul>
-          <p className="aside muted">
-            {MBTI.type} · {MBTI.name} — 말보다 행동으로 보여주는 쪽입니다.
-          </p>
+        <Section id="about" eyebrow="About" title="일하는 방식">
+          <ol className="list about">
+            {WORKSTYLE.map((l, i) => (
+              <li key={l}>
+                <span className="mono">{String(i + 1).padStart(2, "0")}</span>
+                <p>{l}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="mono about-note">{MBTI.type} · {MBTI.name} — 말보다 행동으로 보여주는 쪽입니다.</p>
         </Section>
 
-        <Section id="contact" index="06" label="연락">
-          <p className="contact-lead">함께 일할 이야기라면 언제든 환영합니다.</p>
-          <a href={`mailto:${PROFILE.email}`} className="contact-mail">{PROFILE.email}</a>
-          <p className="aside">
-            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="link">
-              GitHub에서 작업물 보기 ↗
-            </a>
-            <Link href="/projects" className="link">전체 프로젝트 보기 →</Link>
-          </p>
-        </Section>
+        <section id="contact" className="contact" aria-labelledby="contact-title">
+          <span className="eyebrow">Contact</span>
+          <h2 id="contact-title" className="contact-title">
+            함께 단단한 시스템을<br />만들어보고 싶다면.
+          </h2>
+          <div className="actions">
+            <CopyEmail email={PROFILE.email} />
+            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn">GitHub에서 작업물 보기</a>
+            <Link href="/projects" className="btn">전체 프로젝트 보기</Link>
+          </div>
+        </section>
       </main>
 
       <footer className="foot">

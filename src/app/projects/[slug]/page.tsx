@@ -27,28 +27,29 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <>
       <header className="bar">
         <div className="bar-inner">
-          <Link href="/projects" className="bar-mark">← 프로젝트 목록으로 돌아가기</Link>
+          <Link href="/projects" className="logo">← 프로젝트 목록으로 돌아가기</Link>
           <ThemeToggle />
         </div>
       </header>
 
       <main className="wrap">
         <div className="page-head">
+          <span className="eyebrow">Project</span>
           <h1 className="page-title">{project.title}</h1>
           <p className="hero-text">{project.summary}</p>
-          <dl className="facts">
-            <div>
-              <dt>기간</dt>
-              <dd>{project.period}</dd>
+          <dl className="stats stats-3">
+            <div className="stat">
+              <dt className="stat-label">기간</dt>
+              <dd className="stat-value stat-value-sm">{project.period}</dd>
             </div>
-            <div>
-              <dt>역할</dt>
-              <dd>{project.role}</dd>
+            <div className="stat">
+              <dt className="stat-label">역할</dt>
+              <dd className="stat-value stat-value-sm">{project.role}</dd>
             </div>
             {(project.githubUrl || project.liveUrl) && (
-              <div>
-                <dt>링크</dt>
-                <dd className="facts-links">
+              <div className="stat">
+                <dt className="stat-label">링크</dt>
+                <dd className="stat-value stat-value-sm facts-links">
                   {project.githubUrl && (
                     <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="link">
                       GitHub 저장소 열기 ↗
@@ -65,24 +66,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </dl>
         </div>
 
-        <Section id="intro" index="01" label="소개">
+        <Section id="intro" eyebrow="Overview" title="소개">
           <p className="prose">{project.description}</p>
         </Section>
 
-        <Section id="highlights" index="02" label="주요 구현">
+        <Section id="highlights" eyebrow="Highlights" title="주요 구현">
           <ol className="numbered">
             {project.highlights.map(h => <li key={h}>{h}</li>)}
           </ol>
         </Section>
 
-        <Section id="stack" index="03" label="기술">
-          <p className="stack-inline">
-            {project.stack.map(s => <span key={s}>{s}</span>)}
-          </p>
+        <Section id="stack" eyebrow="Tech Stack" title="기술 스택">
+          <ul className="pills">
+            {project.stack.map(s => <li key={s}>{s}</li>)}
+          </ul>
         </Section>
 
         {hasImages && project.images && (
-          <Section id="screens" index="04" label="화면">
+          <Section id="screens" eyebrow="Screens" title="화면">
             <ImageGallery images={project.images} slug={slug} title={project.title} />
           </Section>
         )}
