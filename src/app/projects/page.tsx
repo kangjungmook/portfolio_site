@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PUBLIC_PROJECTS } from "@/lib/projects";
+import { DETAIL_PROJECTS } from "@/lib/projects";
 import ProjectItem from "@/components/ProjectItem";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -19,10 +19,10 @@ export default function ProjectsPage() {
         <div className="page-head">
           <span className="eyebrow">Selected Works</span>
           <h1 className="page-title">프로젝트</h1>
-          <p className="hero-text">직접 만들고 운영하며 배운 것들을 모아뒀습니다.</p>
+          <p className="hero-text">화면과 기능을 자세히 정리한 프로젝트입니다.</p>
         </div>
         <div className="list">
-          {PUBLIC_PROJECTS.map(p => <ProjectItem key={p.slug} project={p} />)}
+          {DETAIL_PROJECTS.map(p => <ProjectItem key={p.slug} project={p} />)}
         </div>
       </main>
     </>
