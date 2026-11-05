@@ -1,10 +1,11 @@
 import type { IconType } from "react-icons";
 import {
-  SiOpenjdk, SiSpring, SiSpringboot, SiSpringsecurity, SiMariadb, SiSupabase, SiDocker, SiNginx,
+  SiSpring, SiSpringboot, SiSpringsecurity, SiMariadb, SiSupabase, SiDocker, SiNginx,
   SiVercel, SiGooglegemini, SiClaude, SiGitlab, SiGithub, SiSubversion, SiPython, SiOpencv,
   SiVuedotjs, SiReact, SiExpo, SiTypescript, SiNodedotjs, SiKotlin, SiJetpackcompose,
   SiFirebase, SiJsonwebtokens, SiHibernate,
 } from "react-icons/si";
+import { FaJava } from "react-icons/fa";
 import {
   LuDatabase, LuDatabaseZap, LuWallet, LuPackage, LuNetwork, LuAppWindow, LuFileText, LuTrendingUp,
 } from "react-icons/lu";
@@ -16,8 +17,8 @@ export interface Tech {
 }
 
 const TECH: Record<string, Tech> = {
-  Java: { Icon: SiOpenjdk, color: "#ED8B00" },
-  "Java 21": { Icon: SiOpenjdk, color: "#ED8B00" },
+  Java: { Icon: FaJava, color: "#E76F00" },
+  "Java 21": { Icon: FaJava, color: "#E76F00" },
   "Spring Boot": { Icon: SiSpringboot, color: "#6DB33F" },
   "Spring MVC": { Icon: SiSpring, color: "#6DB33F" },
   "Spring Security": { Icon: SiSpringsecurity, color: "#6DB33F" },
