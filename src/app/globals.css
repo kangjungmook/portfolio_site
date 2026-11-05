@@ -55,21 +55,6 @@
   color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --bg: oklch(21% 0.02 262);
-    --surface: oklch(25% 0.022 262);
-    --soft: oklch(27% 0.024 262);
-    --line: oklch(33% 0.022 262);
-    --ink: oklch(93% 0.008 262);
-    --muted: oklch(75% 0.02 258);
-    --faint: oklch(67% 0.022 258);
-    --accent: oklch(74% 0.13 264);
-    --on-accent: oklch(20% 0.03 264);
-    color-scheme: dark;
-  }
-}
-
 /* ───────── Base ───────── */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--bar); }
