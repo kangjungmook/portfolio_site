@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getProject, DETAIL_PROJECTS } from "@/lib/projects";
 import Section from "@/components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
+import TechIcon from "@/components/TechIcon";
 import ImageGallery from "./ImageGallery";
 
 export function generateStaticParams() {
@@ -101,7 +102,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <Section id="stack" eyebrow="Tech Stack" title="기술 스택">
           <ul className="pills">
-            {project.stack.map(s => <li key={s}>{s}</li>)}
+            {project.stack.map(s => <li key={s}><TechIcon name={s} size={14} />{s}</li>)}
           </ul>
         </Section>
 
