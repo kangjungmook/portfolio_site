@@ -400,6 +400,13 @@ strong { font-weight: 700; color: var(--ink); }
   .hero > :nth-child(4) { animation-delay: 0.24s; }
   .hero > :nth-child(5) { animation-delay: 0.32s; }
 }
+/* 스크롤 등장: 화면 아래쪽 요소만 JS가 .rv로 숨겨 두었다가 보이면 .rv-in */
+.rv { opacity: 0; transform: translateY(var(--s4)); }
+.rv.rv-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s ease var(--rv-delay, 0ms), transform 0.6s ease var(--rv-delay, 0ms);
+}
 @keyframes pulse { 50% { opacity: 0.35; } }
 @keyframes rise { from { opacity: 0; transform: translateY(var(--s2)); } }
 
