@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import TechIcon from "./TechIcon";
 import { hasDetail, type Project } from "@/lib/projects";
 
 const CIRCLED = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧"];
@@ -44,7 +45,7 @@ export default function ProjectItem({ project, index }: { project: Project; inde
             <ul className="did">{did.map(d => <li key={d}>{d}</li>)}</ul>
           </div>
         )}
-        <ul className="pills">{stack.map(s => <li key={s}>{s}</li>)}</ul>
+        <ul className="pills">{stack.map(s => <li key={s}><TechIcon name={s} size={14} />{s}</li>)}</ul>
       </div>
     </article>
   );

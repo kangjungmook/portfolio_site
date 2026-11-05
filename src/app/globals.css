@@ -289,6 +289,31 @@ strong { font-weight: 700; color: var(--ink); }
 .did { display: grid; gap: var(--s2); color: var(--muted); }
 .did li { padding-left: var(--s4); position: relative; text-wrap: pretty; }
 .did li::before { content: ""; position: absolute; left: 0; top: 0.8em; width: 6px; height: 1px; background: var(--faint); }
+.core-chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.core-chips li, .tech-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 44px;
+  padding: var(--s1) var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-weight: 600;
+}
+.tech-icon { flex: none; color: var(--ink); }
+.core-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--s4); }
+.core-grid li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s2);
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--accent);
+}
+.core-name { font-size: var(--t1); font-weight: 700; letter-spacing: -0.01em; margin-top: var(--s2); }
+.tech-list { display: flex; flex-wrap: wrap; gap: var(--s2); }
 .mono-lg { font-family: var(--font-mono); font-size: var(--t1); color: var(--muted); }
 .prose-cols { display: grid; gap: var(--s4); max-width: 44em; color: var(--muted); font-size: var(--t1); line-height: 1.75; text-wrap: pretty; }
 .activity { display: flex; flex-direction: column; gap: var(--s3); }
@@ -298,7 +323,7 @@ strong { font-weight: 700; color: var(--ink); }
 .proj:hover .proj-more { transform: translateX(var(--s1)); }
 .proj-side { display: flex; flex-direction: column; gap: var(--s4); justify-content: space-between; }
 .pills { display: flex; flex-wrap: wrap; gap: var(--s2); }
-.pills li { padding: var(--s1) var(--s3); background: var(--soft); border-radius: 999px; font-family: var(--font-mono); font-size: var(--t-1); color: var(--muted); }
+.pills li { display: inline-flex; align-items: center; gap: var(--s2); padding: var(--s1) var(--s3); background: var(--soft); border-radius: 999px; font-family: var(--font-mono); font-size: var(--t-1); color: var(--muted); }
 
 /* Experience */
 .exp {

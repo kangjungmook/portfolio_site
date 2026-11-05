@@ -7,6 +7,7 @@ import ProjectItem from "@/components/ProjectItem";
 import ContribGraph from "@/components/ContribGraph";
 import ThemeToggle from "@/components/ThemeToggle";
 import CopyEmail from "@/components/CopyEmail";
+import TechIcon from "@/components/TechIcon";
 
 // 1시간마다 깃허브 데이터·경력 기간 갱신
 export const revalidate = 3600;
@@ -63,7 +64,11 @@ export default async function Portfolio() {
           <h1 className="hero-title">
             기능을 만드는 것에서 끝내지 않고, <em>현장에서 돌아가는 것</em>까지 책임지는 백엔드 개발자입니다.
           </h1>
-          <p className="hero-text mono-lg">{PROFILE.stack}</p>
+          <ul className="core-chips" aria-label="주력 기술">
+            {PROFILE.coreStack.map(t => (
+              <li key={t}><TechIcon name={t} size={20} />{t}</li>
+            ))}
+          </ul>
           <div className="actions">
             <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn btn-solid">
               GitHub 프로필 열기 <span className="mono">↗</span>
@@ -93,11 +98,24 @@ export default async function Portfolio() {
         </Section>
 
         <Section id="skills" eyebrow="Skills" title="기술">
+          <ul className="core-grid" aria-label="주력 기술">
+            {PROFILE.coreStack.map(t => (
+              <li key={t}>
+                <TechIcon name={t} size={40} />
+                <span className="core-name">{t}</span>
+                <span className="mono">주력</span>
+              </li>
+            ))}
+          </ul>
           <div className="list">
             {SKILLS.map(s => (
               <div key={s.group} className="exp">
                 <p className="mono exp-label">{s.group}</p>
-                <ul className="pills">{s.items.map(i => <li key={i}>{i}</li>)}</ul>
+                <ul className="tech-list">
+                  {s.items.map(i => (
+                    <li key={i}><TechIcon name={i} size={20} />{i}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
