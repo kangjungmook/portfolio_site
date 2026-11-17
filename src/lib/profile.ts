@@ -19,7 +19,7 @@ export const SKILLS: { group: string; items: string[] }[] = [
   { group: "Database", items: ["Oracle", "MariaDB", "Supabase"] },
   { group: "DevOps / Infra", items: ["Docker", "nginx", "Vercel", "WAR 배포", "네트워크 구성"] },
   { group: "API / AI", items: ["Google Gemini", "Claude API", "토스페이먼츠"] },
-  { group: "Tools", items: ["GitLab", "GitHub", "SVN", "Claude Code"] },
+  { group: "Tools", items: ["GitLab", "GitHub", "SVN", "Claude Code", "Codex", "ChatGPT"] },
   { group: "Etc", items: ["Python", "OpenCV", "Tkinter", "PyInstaller"] },
 ];
 
