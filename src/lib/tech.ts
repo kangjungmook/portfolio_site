@@ -6,6 +6,7 @@ import {
   SiFirebase, SiJsonwebtokens, SiHibernate,
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
+import { RiOpenaiFill } from "react-icons/ri";
 import {
   LuDatabase, LuDatabaseZap, LuWallet, LuPackage, LuNetwork, LuAppWindow, LuFileText, LuTrendingUp,
 } from "react-icons/lu";
@@ -47,6 +48,8 @@ const TECH: Record<string, Tech> = {
   "Google Gemini": { Icon: SiGooglegemini, color: "#8E75B2" },
   "Claude API": { Icon: SiClaude, color: "#D97757" },
   "Claude Code": { Icon: SiClaude, color: "#D97757" },
+  Codex: { Icon: RiOpenaiFill },
+  ChatGPT: { Icon: RiOpenaiFill },
   토스페이먼츠: { Icon: LuWallet },
   GitLab: { Icon: SiGitlab, color: "#FC6D26" },
   GitHub: { Icon: SiGithub },
